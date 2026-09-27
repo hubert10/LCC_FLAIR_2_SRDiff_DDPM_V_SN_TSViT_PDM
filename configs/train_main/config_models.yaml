@@ -1,0 +1,54 @@
+models: 
+    monotemp_model: 
+        new_channels_init_mode: 'random' # [copy_first / copy_second / copy_third / random]
+
+    t_convformer:  
+        # sits Model
+        str_conv_k: 4
+        str_conv_s: 2
+        str_conv_p: 1
+        n_head: 16
+        d_model: 256
+        d_k: 4
+        embed_dim: 64 # 96 transformer latent vector size
+        uper_head_dim: 512  # decoder internal dimension - default=512
+        depths: [2, 2, 6, 2] # , 2] # SwinTransformer Depth. No. of transformer layers per SwinTransformerBlock. Should be min. 2 for 1)Window-MSA and 2)ShiftedWindow-MSA!
+        num_heads: [2, 4, 8, 16] # , 16] # [3, 6, 12, 24] # No. of parallel MSA-Heads per SwinTransformerBlock
+        mlp_ratio: 4.0
+        pool_scales: (1, 2, 3) #, 5) # (1, 2, 3, 6) the reason here is that our images are too small 40X40
+        aer_channels_list: [128, 256, 512]
+        sits_channels_list: [64, 128, 256]
+        block_channels: [128, 256, 512]
+        block_layers: [2, 2, 5]
+        # Spatial Feature Extraction
+        spa_temp_att: "separate-st" # ["full-st", "only-temp", "separate-st"] # "full-st", ---> full-spa-temp-att, "temp" ---> only-temp, "separate-st"
+        conv_spa_att: True # IF True use conv att instead of self-attention
+
+    utae: 
+        # UTAE Model
+        encoder_widths: [64,128,256,512] # [64,64,128,128] 1st and last must be equivalent to decoder_widths
+        decoder_widths: [64,128,256,512] # [64,64,128,128] 1st and last must be equivalent to encoder_widths
+        out_conv: [32, 13]
+        str_conv_k: 4
+        str_conv_s: 2
+        str_conv_p: 1
+        agg_mode: att_group
+        encoder_norm: group
+        n_head: 16
+        d_model: 256
+        d_k: 4
+        ref_year: 2021 # defined for whole dataset
+        ref_date: 05-15 # defined for whole dataset
+        pad_value: 0
+        padding_mode: reflect
+
+    maxvit:
+        # MaxViT Model
+        img_size: 64
+        decoder_channels: 256 
+        dropout: 0.2
+        window_size: 8 
+        window_cond_size: 5
+
+
+
